@@ -3,44 +3,55 @@ package com.example.newsapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.example.newsapp.ui.navigation.AppNavHost
+import com.example.newsapp.ui.navigation.BottomNavItem
 import com.example.newsapp.ui.theme.NewsAppTheme
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val screens = listOf(
+                BottomNavItem.Headlines,
+                BottomNavItem.Sources,
+                BottomNavItem.Saved
+            )
+            val navController = rememberNavController()
+            val backStackEntry = navController.currentBackStackEntryAsState()
+
             NewsAppTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
+                Scaffold(bottomBar = {
+                    NavigationBar {
+                        screens.forEach { screen ->
+                            NavigationBarItem(selected = screen.route == backStackEntry.value?.destination?.route,
+                                onClick = { navController.navigate(screen.route) },
+                                label = {
+                                    Text(text = screen.title)
+                                },
+                                icon = {
+                                    Icon(imageVector = screen.icon, contentDescription = "")
+                                })
+                        }
+                    }
+
+                }) {
+                    AppNavHost(
+                        modifier = Modifier.padding(it),
+                        navHostController = navController
+                    )
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    NewsAppTheme {
-        Greeting("Android")
     }
 }
