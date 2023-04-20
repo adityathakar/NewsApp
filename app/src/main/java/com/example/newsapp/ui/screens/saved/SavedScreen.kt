@@ -18,6 +18,10 @@ import com.example.newsapp.R
 
 @Composable
 fun SavedScreen() {
+// Lets use url as primary key
+    // in the activity the favorite button will be based on if url key is present in db
+    // and on toggle of that button we will add/delete article from db
+
     Column(
         modifier = Modifier
             .fillMaxSize()
