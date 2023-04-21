@@ -16,7 +16,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.newsapp.ui.navigation.AppNavHost
 import com.example.newsapp.ui.navigation.BottomNavItem
 import com.example.newsapp.ui.theme.NewsAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
