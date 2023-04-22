@@ -21,5 +21,5 @@ abstract class ArticleDao {
     abstract suspend fun removeArticle(article: ArticleEntity)
 
     @Query("SELECT EXISTS (SELECT 1 FROM ArticleEntity WHERE url = :url)")
-    abstract suspend fun articleExist(url: String): Boolean
+    abstract fun articleExist(url: String): Flow<Boolean>
 }

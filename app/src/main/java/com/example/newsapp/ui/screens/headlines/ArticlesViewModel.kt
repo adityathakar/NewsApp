@@ -15,9 +15,9 @@ class ArticlesViewModel @Inject constructor(
     private val getArticlesUseCase: GetArticlesUseCase
 ) : ViewModel() {
 
-    private val articlesStateFlow = MutableStateFlow<ArticlesState>(ArticlesState.Loading)
+    private val _state = MutableStateFlow<ArticlesState>(ArticlesState.Loading)
 
-    val articlesUiStateFlow = articlesStateFlow.asStateFlow()
+    val uiStateFlow = _state.asStateFlow()
 
     init {
 
@@ -25,7 +25,7 @@ class ArticlesViewModel @Inject constructor(
             runCatching {
                 val articles = getArticlesUseCase.execute()
                 Log.d("Adi", "Articles: $articles")
-                articlesStateFlow.value = ArticlesState.Success(articles)
+                _state.value = ArticlesState.Success(articles)
             }.onFailure {
                 Log.d("Adi", "Error: $it")
             }

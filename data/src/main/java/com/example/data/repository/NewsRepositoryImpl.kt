@@ -1,7 +1,9 @@
 package com.example.data.repository
 
 import com.example.data.api.service.NewsApiService
+import com.example.data.db.dao.ArticleDao
 import com.example.data.db.dao.SourceDao
+import com.example.data.db.entity.ArticleEntity
 import com.example.data.db.entity.SourceEntity
 import com.example.domain.model.Article
 import com.example.domain.model.Source
@@ -9,6 +11,7 @@ import com.example.domain.repository.NewsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import javax.inject.Inject
@@ -16,6 +19,7 @@ import javax.inject.Inject
 class NewsRepositoryImpl @Inject constructor(
     private val newsApiService: NewsApiService,
     private val sourceDao: SourceDao,
+    private val articleDao: ArticleDao,
 ) : NewsRepository {
 
     override suspend fun getArticles(): List<Article> {
@@ -31,6 +35,44 @@ class NewsRepositoryImpl @Inject constructor(
                 articleImageUrl = it.articleImageUrl ?: ""
             )
         }
+    }
+
+    override suspend fun getSavedArticles(): Flow<List<Article>> {
+        return articleDao.getArticles().map { articleEntityList ->
+            articleEntityList.map {
+                Article(
+                    author = it.author,
+                    title = it.title,
+                    description = it.description,
+                    articleUrl = it.url,
+                    articleImageUrl = it.imageUrl,
+                )
+            }
+        }
+    }
+
+    override suspend fun addArticleToDb(article: Article) {
+        articleDao.addArticle(
+            ArticleEntity(
+                url = article.articleUrl,
+                imageUrl = article.articleImageUrl,
+                author = article.author,
+                title = article.title,
+                description = article.description,
+            )
+        )
+    }
+
+    override suspend fun removeArticleFromDb(article: Article) {
+        articleDao.removeArticle(
+            ArticleEntity(
+                url = article.articleUrl,
+                imageUrl = article.articleImageUrl,
+                author = article.author,
+                title = article.title,
+                description = article.description,
+            )
+        )
     }
 
     override suspend fun getSources(): Flow<List<Source>> {
@@ -57,4 +99,8 @@ class NewsRepositoryImpl @Inject constructor(
 
     override suspend fun removeSourceFromDb(sourceId: String) =
         sourceDao.removeSource(SourceEntity(sourceId = sourceId))
+
+    override suspend fun isArticleFavourite(article: Article): Flow<Boolean> {
+        return articleDao.articleExist(article.articleUrl)
+    }
 }

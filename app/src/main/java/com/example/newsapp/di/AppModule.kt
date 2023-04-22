@@ -6,6 +6,7 @@ import com.example.data.api.NewsApi
 import com.example.data.api.service.NewsApiService
 import com.example.data.api.service.NewsApiServiceImpl
 import com.example.data.db.AppDatabase
+import com.example.data.db.dao.ArticleDao
 import com.example.data.db.dao.SourceDao
 import com.example.data.repository.NewsRepositoryImpl
 import com.example.domain.repository.NewsRepository
@@ -58,6 +59,11 @@ abstract class AppModule {
         @Provides
         fun provideSourceDao(appDatabase: AppDatabase): SourceDao {
             return appDatabase.sourceDao()
+        }
+
+        @Provides
+        fun provideArticleDao(appDatabase: AppDatabase): ArticleDao {
+            return appDatabase.articleDao()
         }
     }
 }

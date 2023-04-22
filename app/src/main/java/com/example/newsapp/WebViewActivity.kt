@@ -29,8 +29,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.domain.model.Article
+import com.example.newsapp.ui.screens.articledetail.ArticleDetailScreen
 import com.example.newsapp.ui.theme.NewsAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class WebViewActivity : ComponentActivity() {
 
     private val article: Article by lazy {
@@ -43,42 +46,10 @@ class WebViewActivity : ComponentActivity() {
             val onBackArrowClicked: () -> Unit = { finish() }
 
             NewsAppTheme {
-                Column(modifier = Modifier.fillMaxSize()) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(5.dp)
-                            .wrapContentHeight(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Icon(
-                            modifier = Modifier
-                                .clickable { onBackArrowClicked() }
-                                .size(30.dp),
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = ""
-                        )
-                        Icon(
-                            modifier = Modifier
-                                .clickable { }
-                                .size(30.dp),
-                            imageVector = Icons.Default.FavoriteBorder, contentDescription = ""
-                        )
-                    }
-                    Spacer(modifier = Modifier.size(10.dp))
-                    AndroidView(factory = {
-                        WebView(it).apply {
-                            layoutParams = ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.MATCH_PARENT
-                            )
-                            webViewClient = WebViewClient()
-                            loadUrl(article.articleUrl)
-                        }
-                    }, update = {
-                        it.loadUrl(article.articleUrl)
-                    })
-                }
+                ArticleDetailScreen(
+                    article = article,
+                    onBackArrowClicked = onBackArrowClicked
+                )
             }
         }
     }
