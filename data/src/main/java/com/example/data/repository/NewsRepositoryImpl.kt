@@ -3,17 +3,35 @@ package com.example.data.repository
 import com.example.data.api.service.NewsApiService
 import com.example.data.db.dao.SourceDao
 import com.example.data.db.entity.SourceEntity
+import com.example.domain.model.Article
 import com.example.domain.model.Source
-import com.example.domain.repository.SourceRepository
+import com.example.domain.repository.NewsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.toList
 import javax.inject.Inject
 
-class SourceRepositoryImpl @Inject constructor(
+class NewsRepositoryImpl @Inject constructor(
     private val newsApiService: NewsApiService,
     private val sourceDao: SourceDao,
-) : SourceRepository {
+) : NewsRepository {
+
+    override suspend fun getArticles(): List<Article> {
+        val sources = sourceDao.getSources().take(1).toList()
+        val sourcesString = sources[0].joinToString { it.sourceId }
+
+        return newsApiService.getArticles(sourcesString).map {
+            Article(
+                author = it.author,
+                title = it.title,
+                description = it.description,
+                articleUrl = it.articleUrl,
+                articleImageUrl = it.articleImageUrl
+            )
+        }
+    }
 
     override suspend fun getSources(): Flow<List<Source>> {
         return combine(

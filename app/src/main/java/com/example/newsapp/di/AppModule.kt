@@ -7,8 +7,8 @@ import com.example.data.api.service.NewsApiService
 import com.example.data.api.service.NewsApiServiceImpl
 import com.example.data.db.AppDatabase
 import com.example.data.db.dao.SourceDao
-import com.example.data.repository.SourceRepositoryImpl
-import com.example.domain.repository.SourceRepository
+import com.example.data.repository.NewsRepositoryImpl
+import com.example.domain.repository.NewsRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -24,7 +24,7 @@ import javax.inject.Singleton
 abstract class AppModule {
 
     @Binds
-    abstract fun provideSourceRepository(sourceRepositoryImpl: SourceRepositoryImpl): SourceRepository
+    abstract fun provideSourceRepository(sourceRepositoryImpl: NewsRepositoryImpl): NewsRepository
 
     @Binds
     abstract fun provideNewsApiService(newsApiServiceImpl: NewsApiServiceImpl): NewsApiService
