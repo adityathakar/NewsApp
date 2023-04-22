@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.domain.model.Article
 import com.example.newsapp.ui.navigation.AppNavHost
 import com.example.newsapp.ui.navigation.BottomNavItem
 import com.example.newsapp.ui.theme.NewsAppTheme
@@ -32,6 +33,10 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val backStackEntry = navController.currentBackStackEntryAsState()
 
+            val onArticleClicked : (Article) -> Unit = {
+                startActivity(WebViewActivity.newIntent(this, it))
+            }
+
             NewsAppTheme {
                 Scaffold(bottomBar = {
                     NavigationBar {
@@ -50,7 +55,8 @@ class MainActivity : ComponentActivity() {
                 }) {
                     AppNavHost(
                         modifier = Modifier.padding(it),
-                        navHostController = navController
+                        navHostController = navController,
+                        onArticleClicked = onArticleClicked,
                     )
                 }
             }

@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.domain.model.Article
 import com.example.newsapp.ui.screens.headlines.ArticlesScreen
 import com.example.newsapp.ui.screens.saved.SavedScreen
 import com.example.newsapp.ui.screens.sources.SourcesScreen
@@ -12,7 +13,8 @@ import com.example.newsapp.ui.screens.sources.SourcesScreen
 @Composable
 fun AppNavHost(
     modifier: Modifier,
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    onArticleClicked: (Article) -> Unit,
 ) {
     NavHost(
         modifier = modifier,
@@ -20,7 +22,7 @@ fun AppNavHost(
         startDestination = BottomNavItem.Headlines.route
     ) {
         composable(BottomNavItem.Headlines.route) {
-            ArticlesScreen()
+            ArticlesScreen(onArticleClicked = onArticleClicked)
         }
         composable(BottomNavItem.Sources.route) {
             SourcesScreen()

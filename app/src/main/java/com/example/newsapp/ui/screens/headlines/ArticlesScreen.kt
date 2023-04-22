@@ -1,5 +1,7 @@
 package com.example.newsapp.ui.screens.headlines
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,24 +21,36 @@ import coil.compose.AsyncImage
 import com.example.domain.model.Article
 
 @Composable
-fun ArticlesScreen(viewModel: ArticlesViewModel = hiltViewModel()) {
+fun ArticlesScreen(
+    viewModel: ArticlesViewModel = hiltViewModel(),
+    onArticleClicked: (Article) -> Unit,
+) {
     val uiState = viewModel.articlesUiStateFlow.collectAsState()
 
-    when(val state = uiState.value) {
+    when (val state = uiState.value) {
         is ArticlesState.Loading -> {
             Text(text = "Loading..", modifier = Modifier.fillMaxSize())
         }
+
         is ArticlesState.Success -> {
-            ArticlesList(articlesList = state.articles)
+            ArticlesList(
+                articlesList = state.articles,
+                onArticleClicked = onArticleClicked
+            )
         }
     }
 }
 
 @Composable
-fun ArticlesList(articlesList: List<Article>) {
+fun ArticlesList(
+    articlesList: List<Article>,
+    onArticleClicked: (Article) -> Unit,
+) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(items = articlesList) {
-            ArticleItem(articleItem = it)
+            Box(modifier = Modifier.clickable { onArticleClicked(it) }) {
+                ArticleItem(articleItem = it)
+            }
         }
     }
 }
