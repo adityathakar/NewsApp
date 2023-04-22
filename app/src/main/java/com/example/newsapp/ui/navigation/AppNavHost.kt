@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.domain.model.Article
 import com.example.newsapp.ui.screens.headlines.ArticlesScreen
-import com.example.newsapp.ui.screens.saved.SavedScreen
+import com.example.newsapp.ui.screens.saved.SavedArticlesScreen
 import com.example.newsapp.ui.screens.sources.SourcesScreen
 
 @Composable
@@ -28,7 +28,7 @@ fun AppNavHost(
             SourcesScreen()
         }
         composable(BottomNavItem.Saved.route) {
-            SavedScreen()
+            SavedArticlesScreen(onArticleClicked = onArticleClicked)
         }
     }
 }
