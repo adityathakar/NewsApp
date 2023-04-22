@@ -9,7 +9,8 @@ class InboundSourceMapper @Inject constructor() : BaseMapper<SourceApiModel, Sou
     override fun transform(input: SourceApiModel): Source {
         return Source(
             id = input.id,
-            name = input.name
+            name = input.name,
+            isSelected = false
         )
     }
 }

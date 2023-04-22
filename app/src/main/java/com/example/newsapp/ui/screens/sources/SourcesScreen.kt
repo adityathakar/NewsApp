@@ -11,6 +11,8 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -22,28 +24,48 @@ import com.example.domain.model.Source
 @Composable
 fun SourcesScreen(viewModel: SourcesViewModel = hiltViewModel()) {
     val sourcesState = viewModel.sourcesUiStateFlow.collectAsState()
+    val onToggleSourceSelection: (Boolean, String) -> Unit = { isSelected, sourceId ->
+        viewModel.toggleSourceSelection(isSelected, sourceId)
+    }
 
-    when(val stateValue = sourcesState.value) {
+    when (val stateValue = sourcesState.value) {
         is SourcesState.Loading -> {
             Text(text = "Loading..", modifier = Modifier.fillMaxSize())
         }
+
         is SourcesState.Success -> {
-            SourcesList(sources = stateValue.sources)
+            SourcesList(
+                sources = stateValue.sources,
+                onToggleSourceSelection = onToggleSourceSelection
+            )
         }
     }
 }
 
 @Composable
-fun SourcesList(sources: List<Source>) {
+fun SourcesList(
+    sources: List<Source>,
+    onToggleSourceSelection: (Boolean, String) -> Unit,
+) {
     LazyColumn(modifier = Modifier.fillMaxHeight()) {
         items(items = sources) {
-            SourceItem(source = it)
+            SourceItem(
+                source = it,
+                onToggleSourceSelection = onToggleSourceSelection
+            )
         }
     }
 }
 
 @Composable
-fun SourceItem(source: Source) {
+fun SourceItem(
+    source: Source,
+    onToggleSourceSelection: (Boolean, String) -> Unit,
+) {
+    val isChecked = remember {
+        mutableStateOf(source.isSelected)
+    }
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -54,20 +76,23 @@ fun SourceItem(source: Source) {
             fontSize = 12.sp, fontWeight = FontWeight.Bold
         )
         Checkbox(
-            checked = false,
-            onCheckedChange = {}
+            checked = isChecked.value,
+            onCheckedChange = {
+                isChecked.value = it
+                onToggleSourceSelection(it, source.id)
+            }
         )
     }
 }
 
-@Preview
-@Composable
-fun SourceItemPreview() {
-    SourceItem(Source("abc", "ABC"))
-}
-
-@Preview
-@Composable
-fun SourcesScreenPreview() {
-    SourcesScreen()
-}
+//@Preview
+//@Composable
+//fun SourceItemPreview() {
+//    SourceItem(Source("abc", "ABC", false), )
+//}
+//
+//@Preview
+//@Composable
+//fun SourcesScreenPreview() {
+//    SourcesScreen()
+//}
