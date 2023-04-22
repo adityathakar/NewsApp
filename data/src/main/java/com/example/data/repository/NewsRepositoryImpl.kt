@@ -24,11 +24,11 @@ class NewsRepositoryImpl @Inject constructor(
 
         return newsApiService.getArticles(sourcesString).map {
             Article(
-                author = it.author,
-                title = it.title,
-                description = it.description,
+                author = it.author ?: "",
+                title = it.title ?: "",
+                description = it.description ?: "",
                 articleUrl = it.articleUrl,
-                articleImageUrl = it.articleImageUrl
+                articleImageUrl = it.articleImageUrl ?: ""
             )
         }
     }
