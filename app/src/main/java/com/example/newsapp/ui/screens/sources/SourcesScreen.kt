@@ -97,15 +97,3 @@ fun SourceItem(
         )
     }
 }
-
-//@Preview
-//@Composable
-//fun SourceItemPreview() {
-//    SourceItem(Source("abc", "ABC", false), )
-//}
-//
-//@Preview
-//@Composable
-//fun SourcesScreenPreview() {
-//    SourcesScreen()
-//}
