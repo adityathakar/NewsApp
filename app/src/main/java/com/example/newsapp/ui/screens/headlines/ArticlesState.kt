@@ -6,5 +6,7 @@ sealed class ArticlesState {
 
     object Loading: ArticlesState()
 
+    object Error: ArticlesState()
+
     data class Success(val articles: List<Article>): ArticlesState()
 }

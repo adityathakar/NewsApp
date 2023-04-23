@@ -24,11 +24,15 @@ fun ArticlesScreen(
     viewModel: ArticlesViewModel = hiltViewModel(),
     onArticleClicked: (Article) -> Unit,
 ) {
-    val uiState = viewModel.uiStateFlow.collectAsState()
+    val uiState = viewModel.state.collectAsState()
 
     when (val state = uiState.value) {
         is ArticlesState.Loading -> {
             Text(text = "Loading..", modifier = Modifier.fillMaxSize())
+        }
+
+        is ArticlesState.Error -> {
+            Text(text = "Error..", modifier = Modifier.fillMaxSize())
         }
 
         is ArticlesState.Success -> {

@@ -16,14 +16,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.domain.model.Source
 
 @Composable
 fun SourcesScreen(viewModel: SourcesViewModel = hiltViewModel()) {
-    val sourcesState = viewModel.sourcesUiStateFlow.collectAsState()
+    val sourcesState = viewModel.state.collectAsState()
     val onToggleSourceSelection: (Boolean, String) -> Unit = { isSelected, sourceId ->
         viewModel.toggleSourceSelection(isSelected, sourceId)
     }
@@ -31,6 +30,10 @@ fun SourcesScreen(viewModel: SourcesViewModel = hiltViewModel()) {
     when (val stateValue = sourcesState.value) {
         is SourcesState.Loading -> {
             Text(text = "Loading..", modifier = Modifier.fillMaxSize())
+        }
+
+        is SourcesState.Error -> {
+            Text(text = "Error..", modifier = Modifier.fillMaxSize())
         }
 
         is SourcesState.Success -> {

@@ -6,5 +6,7 @@ sealed class SourcesState {
 
     object Loading : SourcesState()
 
+    object Error : SourcesState()
+
     data class Success(val sources: List<Source>) : SourcesState()
 }

@@ -21,6 +21,14 @@ fun SavedArticlesScreen(
             Text(text = "Loading..", modifier = Modifier.fillMaxSize())
         }
 
+        is SavedArticlesState.Error -> {
+            Text(text = "Error..", modifier = Modifier.fillMaxSize())
+        }
+
+        is SavedArticlesState.Empty -> {
+            Text(text = "Empty..", modifier = Modifier.fillMaxSize())
+        }
+
         is SavedArticlesState.Success -> {
             ArticlesList(
                 articlesList = state.articles,

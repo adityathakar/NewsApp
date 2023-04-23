@@ -34,7 +34,7 @@ fun ArticleDetailScreen(
     article: Article,
     onBackArrowClicked: () -> Unit
 ) {
-    val uiState = viewModel.uiStateFlow.collectAsState()
+    val uiState = viewModel.state.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.isArticleFavourite(article)

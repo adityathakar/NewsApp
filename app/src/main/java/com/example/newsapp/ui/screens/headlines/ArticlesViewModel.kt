@@ -1,6 +1,5 @@
 package com.example.newsapp.ui.screens.headlines
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.usecase.GetArticlesUseCase
@@ -17,17 +16,16 @@ class ArticlesViewModel @Inject constructor(
 
     private val _state = MutableStateFlow<ArticlesState>(ArticlesState.Loading)
 
-    val uiStateFlow = _state.asStateFlow()
+    val state = _state.asStateFlow()
 
     init {
 
         viewModelScope.launch {
             runCatching {
                 val articles = getArticlesUseCase.execute()
-                Log.d("Adi", "Articles: $articles")
                 _state.value = ArticlesState.Success(articles)
             }.onFailure {
-                Log.d("Adi", "Error: $it")
+                _state.value = ArticlesState.Error
             }
         }
     }
