@@ -1,6 +1,7 @@
 package com.example.newsapp.ui.screens.sources
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,9 +17,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.domain.model.Source
+import com.example.newsapp.ui.common.LoadingScreen
 
 @Composable
 fun SourcesScreen(viewModel: SourcesViewModel = hiltViewModel()) {
@@ -29,7 +32,7 @@ fun SourcesScreen(viewModel: SourcesViewModel = hiltViewModel()) {
 
     when (val stateValue = sourcesState.value) {
         is SourcesState.Loading -> {
-            Text(text = "Loading..", modifier = Modifier.fillMaxSize())
+            LoadingScreen()
         }
 
         is SourcesState.Error -> {
@@ -54,7 +57,10 @@ fun SourcesList(
     sources: List<Source>,
     onToggleSourceSelection: (Boolean, String) -> Unit,
 ) {
-    LazyColumn(modifier = Modifier.fillMaxHeight()) {
+    LazyColumn(
+        modifier = Modifier.fillMaxHeight(),
+        contentPadding = PaddingValues(5.dp)
+    ) {
         items(items = sources) {
             SourceItem(
                 source = it,
@@ -80,7 +86,7 @@ fun SourceItem(
     ) {
         Text(
             text = source.name,
-            fontSize = 12.sp, fontWeight = FontWeight.Bold
+            fontSize = 16.sp, fontWeight = FontWeight.Bold
         )
         Checkbox(
             checked = isChecked.value,
