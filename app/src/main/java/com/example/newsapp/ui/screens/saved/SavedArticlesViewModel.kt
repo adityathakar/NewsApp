@@ -6,7 +6,6 @@ import com.example.domain.usecase.GetSavedArticlesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,17 +19,18 @@ class SavedArticlesViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            getSavedArticlesUseCase.execute()
-                .catch {
-                    _state.value = SavedArticlesState.Error
-                }
-                .collect {
-                    _state.value = if (it.isEmpty()) {
-                        SavedArticlesState.Empty
-                    } else {
-                        SavedArticlesState.Success(it)
+            runCatching {
+                getSavedArticlesUseCase.execute()
+                    .collect {
+                        _state.value = if (it.isEmpty()) {
+                            SavedArticlesState.Empty
+                        } else {
+                            SavedArticlesState.Success(it)
+                        }
                     }
-                }
+            }.onFailure {
+                _state.value = SavedArticlesState.Error
+            }
         }
     }
 }

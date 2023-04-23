@@ -23,7 +23,11 @@ class ArticlesViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 val articles = getArticlesUseCase.execute()
-                _state.value = ArticlesState.Success(articles)
+                _state.value = if (articles.isEmpty()) {
+                    ArticlesState.Empty
+                } else {
+                    ArticlesState.Success(articles)
+                }
             }.onFailure {
                 _state.value = ArticlesState.Error
             }

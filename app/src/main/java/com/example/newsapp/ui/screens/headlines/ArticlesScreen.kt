@@ -35,6 +35,10 @@ fun ArticlesScreen(
             Text(text = "Error..", modifier = Modifier.fillMaxSize())
         }
 
+        is ArticlesState.Empty -> {
+            Text(text = "Empty..", modifier = Modifier.fillMaxSize())
+        }
+
         is ArticlesState.Success -> {
             ArticlesList(
                 articlesList = state.articles,

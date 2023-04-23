@@ -8,5 +8,7 @@ sealed class SourcesState {
 
     object Error : SourcesState()
 
+    object Empty : SourcesState()
+
     data class Success(val sources: List<Source>) : SourcesState()
 }

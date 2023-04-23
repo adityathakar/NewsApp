@@ -24,8 +24,12 @@ class SourcesViewModel @Inject constructor(
 
         viewModelScope.launch {
             runCatching {
-                getSourcesUseCase.execute().collect {
-                    _state.value = SourcesState.Success(it)
+                getSourcesUseCase.execute().collect { sourcesList ->
+                    _state.value = if (sourcesList.isEmpty()) {
+                        SourcesState.Empty
+                    } else {
+                        SourcesState.Success(sourcesList)
+                    }
                 }
             }.onFailure {
                 _state.value = SourcesState.Error

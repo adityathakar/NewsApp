@@ -36,6 +36,10 @@ fun SourcesScreen(viewModel: SourcesViewModel = hiltViewModel()) {
             Text(text = "Error..", modifier = Modifier.fillMaxSize())
         }
 
+        is SourcesState.Empty -> {
+            Text(text = "Empty..", modifier = Modifier.fillMaxSize())
+        }
+
         is SourcesState.Success -> {
             SourcesList(
                 sources = stateValue.sources,

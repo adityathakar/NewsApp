@@ -8,8 +8,8 @@ class ToggleArticleFavouriteUseCase @Inject constructor(
     private val newsRepository: NewsRepository
 ) {
 
-    suspend fun execute(isSelected: Boolean, article: Article) {
-        if (isSelected) {
+    suspend fun execute(isFavourite: Boolean, article: Article) {
+        if (isFavourite) {
             newsRepository.addArticleToDb(article)
         } else {
             newsRepository.removeArticleFromDb(article)
